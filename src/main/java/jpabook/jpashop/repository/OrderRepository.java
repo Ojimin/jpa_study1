@@ -1,6 +1,7 @@
 package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -60,4 +61,15 @@ public class OrderRepository {
         return query.getResultList();
     }
     //이 방법 외에 jpa criteria 방법이 있음 => but 실무에서 안쓴다! 그래서 querydsl을 쓴다 요즘은!
+
+    //fetch join => 백퍼센트 이해 필요!!기본편 참고
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .getResultList();
+    }
+
+
 }
